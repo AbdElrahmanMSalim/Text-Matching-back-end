@@ -29,7 +29,7 @@ router.post("/", download, async (req, res) => {
 
   questionImage = new QuestionImage({
     title: req.body.title,
-    originalImagePath: req.file.destination + "/" + req.body.title,
+    originalImagePath: req.path,
     text: response.data.text,
   });
   await questionImage.save();

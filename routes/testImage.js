@@ -9,8 +9,10 @@ const callBertModel = require("./common/callBertModel");
 router.post("/", downloadTest, async (req, res) => {
   if (!req.file) return res.status(400).send("The image file is required");
 
-  let questions = await QuestionImage.find({}).select(["text"]);
-  questions = questions.map((el) => el.text);
+  let questions = await QuestionImage.find({}).select([
+    "text",
+    "originalImagePath",
+  ]);
 
   let mathPixResponse, bertModelResponse;
 

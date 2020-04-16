@@ -22,10 +22,9 @@ function getAllScores(x, y, questions) {
   let cnt = 0;
   for (const el of x) {
     scores.push({
-      question: questions[cnt],
+      question: questions[cnt].text,
       similarity: (cosinesim(el, y[0]) * 100).toString().slice(0, 5),
-      image:
-        "https://filedn.com/ltOdFv1aqz1YIFhf4gTY8D7/ingus-info/BLOGS/Photography-stocks3/stock-photography-slider.jpg",
+      image: questions[cnt].originalImagePath,
     });
     cnt += 1;
   }
@@ -35,10 +34,11 @@ function getAllScores(x, y, questions) {
 module.exports = async function callBertModel(questions, query) {
   const questionsData = {
     id: 1,
-    texts: questions,
+    texts: questions.map((el) => el.text),
   };
+
   const questionsResponse = await axios.post(
-    "http://127.0.0.1:8125/encode",
+    "http://139.59.68.43:8125/encode",
     questionsData
   );
 
@@ -47,7 +47,7 @@ module.exports = async function callBertModel(questions, query) {
     texts: [query],
   };
   const queryResponse = await axios.post(
-    "http://127.0.0.1:8125/encode",
+    "http://139.59.68.43:8125/encode",
     queryData
   );
 

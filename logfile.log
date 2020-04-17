@@ -1789,3 +1789,9 @@
 {"level":"info","message":"Connected to mongodb://localhost/questionImages...","timestamp":"2020-04-16T02:36:04.236Z"}
 {"level":"info","message":"Listening on port 3000...","timestamp":"2020-04-16T02:44:36.953Z"}
 {"level":"info","message":"Connected to mongodb://localhost/questionImages...","timestamp":"2020-04-16T02:44:36.976Z"}
+{"level":"info","message":"Listening on port 4000...","timestamp":"2020-04-16T13:44:48.530Z"}
+{"level":"info","message":"Connected to mongodb://localhost/questionImages...","timestamp":"2020-04-16T13:44:48.556Z"}
+{"level":"info","message":"Listening on port 4000...","timestamp":"2020-04-16T15:31:44.429Z"}
+{"level":"info","message":"Connected to mongodb://localhost/questionImages...","timestamp":"2020-04-16T15:31:44.464Z"}
+{"level":"info","message":"Listening on port 8000...","timestamp":"2020-04-16T15:34:26.946Z"}
+{"level":"info","message":"Connected to mongodb://localhost/questionImages...","timestamp":"2020-04-16T15:34:27.001Z"}

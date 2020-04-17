@@ -18,7 +18,10 @@ router.post("/", downloadTest, async (req, res) => {
 
   try {
     mathPixResponse = await callMathPix(req.file);
+    console.log("mathPixResponse.data.text");
     console.log(mathPixResponse.data.text);
+    console.log("mathPixResponse");
+    console.log(mathPixResponse);
   } catch (error) {
     res.status(400);
     return res.send("Failed in mathpix part: " + error);
@@ -29,6 +32,7 @@ router.post("/", downloadTest, async (req, res) => {
       questions,
       mathPixResponse.data.text
     );
+    console.log("bertModelResponse");
     console.log(bertModelResponse);
     res.send({
       extractedText: mathPixResponse.data.text,

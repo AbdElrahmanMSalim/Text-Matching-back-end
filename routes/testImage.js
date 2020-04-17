@@ -18,13 +18,11 @@ router.post("/", downloadTest, async (req, res) => {
 
   try {
     mathPixResponse = await callMathPix(req.file);
-    console.log("mathPixResponse");
+    console.log("mathPixResponse.data.error");
     console.log(mathPixResponse.data.error);
-    console.log("mathPixResponse.data");
-    console.log(mathPixResponse.data);
     if (mathPixResponse.data.error) {
       res.status(400);
-      return res.send("Failed in mathpix part: " + error);
+      return res.send("Failed in mathpix part: " + mathPixResponse.data.error);
     }
   } catch (error) {
     res.status(400);

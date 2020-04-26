@@ -34,8 +34,7 @@ router.post("/", downloadTest, async (req, res) => {
       questions,
       mathPixResponse.data.text
     );
-    console.log("bertModelResponse");
-    console.log(bertModelResponse);
+
     res.send({
       extractedText: mathPixResponse.data.text,
       scores: bertModelResponse,

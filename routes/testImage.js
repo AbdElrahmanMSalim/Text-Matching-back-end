@@ -8,7 +8,7 @@ const callBertModel = require("./common/callBertModel");
 
 router.post("/", downloadTest, async (req, res) => {
   if (!req.file) return res.status(400).send("The image file is required");
-
+  console.log(req.file)
   let questions = await QuestionImage.find({}).select([
     "text",
     "originalImagePath",
@@ -18,9 +18,10 @@ router.post("/", downloadTest, async (req, res) => {
 
   try {
     mathPixResponse = await callMathPix(req.file);
-    console.log("mathPixResponse.data.error");
-    console.log(mathPixResponse.data.error);
+
     if (mathPixResponse.data.error) {
+      console.log("mathPixResponse.data.error");
+      console.log(mathPixResponse.data.error);
       res.status(400);
       return res.send("Failed in mathpix part: " + mathPixResponse.data.error);
     }
@@ -35,7 +36,7 @@ router.post("/", downloadTest, async (req, res) => {
       mathPixResponse.data.text
     );
     console.log("bertModelResponse");
-    console.log(bertModelResponse);
+    // console.log(bertModelResponse[]);
     res.send({
       extractedText: mathPixResponse.data.text,
       scores: bertModelResponse,

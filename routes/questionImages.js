@@ -3,9 +3,12 @@ const { QuestionImage, validate } = require("../models/questionImage");
 const download = require("../middleware/download");
 const express = require("express");
 const callMathPix = require("./common/callMathPix");
+const callFlaskModel = require("./common/callFlaskModel");
 const router = express.Router();
 
 router.post("/", download, async (req, res) => {
+  console.log(req.file);
+
   if (!req.file) return res.status(400).send("The image file is required");
 
   let questionImage = await QuestionImage.findOne({ title: req.body.title });
@@ -24,13 +27,29 @@ router.post("/", download, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.send(error);
+    res.status(400);
+    return res.send(error);
+  }
+
+  let r;
+  try {
+    // r = await callFlaskModel(req.file.path);//todo when deploying
+    r = await callFlaskModel("./1.jpg");
+    if (!r) {
+      res.status(400);
+      return res.send("Error from image similarity model");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400);
+    return res.send("Error from image similarity model");
   }
 
   questionImage = new QuestionImage({
     title: req.body.title,
     originalImagePath: req.file.path,
     text: response.data.text,
+    encoding: r.data.encoding,
   });
   await questionImage.save();
 

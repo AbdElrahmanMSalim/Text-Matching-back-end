@@ -3,18 +3,18 @@ const downloadTest = require("../middleware/downloadTest");
 const { QuestionImage } = require("../models/questionImage");
 const express = require("express");
 const router = express.Router();
-const callMathPix = require("./common/callMathPix");
-const callBertModel = require("./common/callBertModel");
+const getAllImageScores = require("./common/cosineSimilarity");
+const callFlaskModel = require("./common/callFlaskModel");
 
 router.post("/", downloadTest, async (req, res) => {
   if (!req.file) return res.status(400).send("The image file is required");
   console.log(req.file)
   let questions = await QuestionImage.find({}).select([
-    "text",
+    "encoding",
     "originalImagePath",
   ]);
 
-  let mathPixResponse, bertModelResponse;
+  let imageModelResponse;
 
   try {
     mathPixResponse = await callMathPix(req.file);
@@ -23,28 +23,27 @@ router.post("/", downloadTest, async (req, res) => {
       console.log("mathPixResponse.data.error");
       console.log(mathPixResponse.data.error);
       res.status(400);
-      return res.send("Failed in mathpix part: " + mathPixResponse.data.error);
+      return res.send("Error from image similarity model");
     }
   } catch (error) {
+    console.error(error);
     res.status(400);
-    return res.send("Failed in mathpix part: " + error);
+    return res.send("Error from image similarity model");
   }
 
-  try {
-    bertModelResponse = await callBertModel(
-      questions,
-      mathPixResponse.data.text
-    );
-    console.log("bertModelResponse");
-    // console.log(bertModelResponse[]);
-    res.send({
-      extractedText: mathPixResponse.data.text,
-      scores: bertModelResponse,
-    });
-  } catch (error) {
-    res.status(400);
-    res.send("Failed in bertmodel: " + error);
-  }
+  // send top ten
+  const scores = getAllImageScores(
+    questions,
+    imageModelResponse.data.encoding,
+    questions,
+    req.file.path
+  );
+
+  console.log(scores);
+
+  res.send({
+    scores: scores,
+  });
 });
 
 module.exports = router;

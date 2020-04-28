@@ -17,11 +17,9 @@ router.post("/", downloadTest, async (req, res) => {
   let imageModelResponse;
 
   try {
-    mathPixResponse = await callMathPix(req.file);
-
-    if (mathPixResponse.data.error) {
-      console.log("mathPixResponse.data.error");
-      console.log(mathPixResponse.data.error);
+    imageModelResponse = await callFlaskModel(req.file.path);//todo when deployed
+    // imageModelResponse = await callFlaskModel("./1.jpg");
+    if (!imageModelResponse) {
       res.status(400);
       return res.send("Error from image similarity model");
     }

@@ -33,8 +33,11 @@ router.post("/", download, async (req, res) => {
 
   let r;
   try {
-    // r = await callFlaskModel(req.file.path);//todo when deploying
-    r = await callFlaskModel("./1.jpg");
+    console.log(req.file);
+    r = await callFlaskModel(req.file.path);//todo when deploying
+    // r = await callFlaskModel("./1.jpg");
+    console.log(r.data);
+
     if (!r) {
       res.status(400);
       return res.send("Error from image similarity model");

@@ -1,4 +1,4 @@
 {
-  "jwtPrivateKey": "",
+  "jwtPrivateKey": "112312",
   "db": "mongodb://localhost/questionImages"
 }

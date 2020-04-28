@@ -19,6 +19,12 @@ const questionImageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  encoding: [
+    {
+      type: Number,
+      required: true,
+    },
+  ],
 });
 
 const QuestionImage = mongoose.model("QuestionImage", questionImageSchema);

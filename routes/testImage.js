@@ -3,12 +3,12 @@ const downloadTest = require("../middleware/downloadTest");
 const { QuestionImage } = require("../models/questionImage");
 const express = require("express");
 const router = express.Router();
-const getAllImageScores = require("./common/cosineSimilarity");
+const { getAllImageScores } = require("./common/cosineSimilarity");
 const callFlaskModel = require("./common/callFlaskModel");
 
 router.post("/", downloadTest, async (req, res) => {
   if (!req.file) return res.status(400).send("The image file is required");
-  console.log(req.file)
+
   let questions = await QuestionImage.find({}).select([
     "encoding",
     "originalImagePath",
@@ -17,8 +17,7 @@ router.post("/", downloadTest, async (req, res) => {
   let imageModelResponse;
 
   try {
-    imageModelResponse = await callFlaskModel(req.file.path);//todo when deployed
-    // imageModelResponse = await callFlaskModel("./1.jpg");
+    imageModelResponse = await callFlaskModel(req.file.path); //todo when deployed
     if (!imageModelResponse) {
       res.status(400);
       return res.send("Error from image similarity model");
@@ -33,11 +32,8 @@ router.post("/", downloadTest, async (req, res) => {
   const scores = getAllImageScores(
     questions,
     imageModelResponse.data.encoding,
-    questions,
     req.file.path
   );
-
-  console.log(scores);
 
   res.send({
     scores: scores,

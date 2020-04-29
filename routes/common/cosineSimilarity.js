@@ -14,21 +14,19 @@ function cosinesim(A, B) {
   return similarity;
 }
 
-module.exports = function getAllScores(x, y, questions) {
+exports.getAllScores = function getAllScores(x, y) {
   const scores = [];
-  let cnt = 0;
   for (const el of x) {
     scores.push({
-      question: questions[cnt].text,
-      similarity: (cosinesim(el, y[0]) * 100).toString().slice(0, 5),
-      image: questions[cnt].originalImagePath,
+      question: el.text,
+      similarity: (cosinesim(el.textEncoding, y) * 100).toString().slice(0, 5),
+      image: el.originalImagePath,
     });
-    cnt += 1;
   }
   return scores;
 };
 
-module.exports = function getAllImageScores(x, y, questions, testImagePath) {
+exports.getAllImageScores = function getAllImageScores(x, y, testImagePath) {
   const scores = [];
 
   for (const el of x) {

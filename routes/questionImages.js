@@ -4,11 +4,11 @@ const download = require("../middleware/download");
 const express = require("express");
 const callMathPix = require("./common/callMathPix");
 const callFlaskModel = require("./common/callFlaskModel");
+const { getTextEncoding } = require("./common/callBertModel");
+
 const router = express.Router();
 
 router.post("/", download, async (req, res) => {
-  console.log(req.file);
-
   if (!req.file) return res.status(400).send("The image file is required");
 
   let questionImage = await QuestionImage.findOne({ title: req.body.title });
@@ -33,10 +33,7 @@ router.post("/", download, async (req, res) => {
 
   let r;
   try {
-    console.log(req.file);
-    r = await callFlaskModel(req.file.path);//todo when deploying
-    // r = await callFlaskModel("./1.jpg");
-    console.log(r.data);
+    r = await callFlaskModel(req.file.path); //todo when deploying
 
     if (!r) {
       res.status(400);
@@ -48,12 +45,28 @@ router.post("/", download, async (req, res) => {
     return res.send("Error from image similarity model");
   }
 
+  let textEncoding;
+  try {
+    textEncoding = await getTextEncoding(response.data.text);
+
+    if (!textEncoding) {
+      res.status(400);
+      return res.send("Error from get Text Encoding ");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400);
+    return res.send("Error from get Text Encoding ");
+  }
+
   questionImage = new QuestionImage({
     title: req.body.title,
     originalImagePath: req.file.path,
     text: response.data.text,
     encoding: r.data.encoding,
+    textEncoding: textEncoding,
   });
+
   await questionImage.save();
 
   res.send(questionImage);
